@@ -75,7 +75,7 @@ function handleKeyPress(e) {
 	// chnage the cursor to be red instead of green
 
 	try {
-		console.log('e', e)
+		//console.log('e', e)
 		shiftNextKey(e.key)
 	} catch (e: StatusUpdate) {
 		window.document.removeEventListener('keyup', handleKeyPress)
@@ -130,6 +130,8 @@ function shiftNextKey(key: string) {
 				next = next.previousSibling
 			}
 
+			prev.forEach((el) => el.classList.remove('miss'))
+			next.classList.remove('miss')
 			break
 		default:
 			// Any valid keystroke should be handled by default case
