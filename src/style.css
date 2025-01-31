@@ -25,14 +25,13 @@ a:hover {
 body {
 	margin: 0;
 	display: flex;
-	place-items: center;
 	min-width: 320px;
 	min-height: 100vh;
 }
 
 h1 {
 	font-size: 3.2em;
-	line-height: 1.1;
+	line-height: 1.4;
 }
 
 #app {
@@ -97,6 +96,12 @@ button:focus-visible {
 
 pre.code {
 	text-align: left;
+	font-family: 'Cutive Mono', serif;
+	font-weight: 400;
+	font-style: normal;
+	letter-spacing: 1px;
+	-webkit-font-smoothing: antialiased;
+	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
 }
 
 span.return {
@@ -112,4 +117,19 @@ span.return:before {
 pre span.active {
 	background: green;
 	color: white;
+}
+
+pre span.comment {
+	opacity: 0.3;
+}
+
+pre span.miss {
+	border: 1px solid red;
+	color: red;
+}
+
+@media (min-width: 760px) {
+	#app {
+		width: 600px;
+	}
 }

@@ -11,31 +11,8 @@ const code = `
         console.log(a);
       }
 `
-function parse(code: string) {
-	let out = code.split('')
-	let is_leading_flag = true
-	out = out.reduce(function (acc, c) {
-		is_leading_flag = !(c !== '\n' || c !== ' ')
-
-		if (is_leading_flag && c === ' ') {
-			return acc
-		}
-		return [...acc, c]
-	}, [])
-
-	return out
-}
-
-function convertToTabs(numSpaces: number, code: string): string {
-	const re = new RegExp('\n(\s{2})+', 'gm')
-	console.log(code.match(re))
-	const out = code.replaceAll(re, '->')
-	console.log(code, out)
-	return out
-}
-
 let s = ''
-let codeList = parse(code)
+let codeList = code.split('')
 let isLeading = false
 const PREFIX_DELIM_CHAR = '/'
 const PREFIX_DELIM_MULT = 2
@@ -63,10 +40,9 @@ for (let [i, c] of codeList.entries()) {
 		s += `<span class="initial">${c}</span>`
 	}
 }
-//console.log(s)
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
 <div>
-  <h1>Hello World</h1>
+  <h1>Javascript</h1>
   <pre class="code">
     ${s}
   </pre>
@@ -97,12 +73,36 @@ function handleKeyPress(e) {
 	// verify if key pressed matches key in idx array
 	// if it doesn't match, set a "miss" class to the element
 	// chnage the cursor to be red instead of green
-	//console.log(e.key, idx)
 
 	try {
+		console.log('e', e)
 		shiftNextKey(e.key)
 	} catch (e: StatusUpdate) {
 		window.document.removeEventListener('keyup', handleKeyPress)
+	}
+}
+
+const keyMap = new Map([
+	['Enter', '⏎'],
+	[' ', ' '],
+])
+
+function validateKey(key: string) {
+	const active = document.querySelector('pre span.active')
+	//console.log('active', active.innerHTML)
+	//Ignore the following keys
+
+	let keyState = active.innerHTML
+	if (keyState !== ' ') {
+		keyState = keyState.trim()
+	}
+
+	if (
+		!(keyMap.has(key) && keyMap.get(key) === keyState) &&
+		key !== keyState
+	) {
+		const active = document.querySelector('.active')
+		active.classList.add('miss')
 	}
 }
 
@@ -118,11 +118,22 @@ function shiftNextKey(key: string) {
 		case 'Control':
 			return
 		case 'Backspace':
-			next = document.querySelector(
-				`pre span:not(.leading, .comment):has(~ span.active)`
-			)
+			next = prev[0].previousSibling
+			if (!next || next.nodeType !== 1) {
+				// This means you are at the start of the code
+				return
+			}
+			while (
+				next?.classList?.contains('leading') ||
+				next?.classList?.contains('comment')
+			) {
+				next = next.previousSibling
+			}
+
 			break
 		default:
+			// Any valid keystroke should be handled by default case
+			validateKey(key)
 			next = document.querySelector(
 				`pre span.active ~ span:not(.leading, .comment)`
 			)
