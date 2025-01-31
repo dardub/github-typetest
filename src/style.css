@@ -96,18 +96,19 @@ button:focus-visible {
 
 pre.code {
 	text-align: left;
-	font-family: 'Cutive Mono', serif;
-	font-weight: 400;
+	font-family: 'Source Code Pro', serif;
+	font-weight: 600;
+	font-optical-sizing: auto;
 	font-style: normal;
 	letter-spacing: 1px;
-	-webkit-font-smoothing: antialiased;
-	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
+	/*-webkit-font-smoothing: antialiased;*/
+	/*text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);*/
 }
 
 span.return {
 	padding: 0 0.1rem;
 	font-weight: 500;
-	opacity: 0.6;
+	opacity: 0.7;
 }
 
 /*span.return:before {*/
