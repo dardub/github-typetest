@@ -4,7 +4,7 @@
 	font-weight: 400;
 
 	color-scheme: light dark;
-	color: rgba(255, 255, 255, 0.87);
+	color: white;
 	background-color: #242424;
 
 	font-synthesis: none;
@@ -107,12 +107,13 @@ pre.code {
 span.return {
 	padding: 0 0.1rem;
 	font-weight: 500;
+	opacity: 0.6;
 }
 
-span.return:before {
-	content: '\23CE';
-	visibility: hidden;
-}
+/*span.return:before {*/
+/*	content: '\23CE';*/
+/*	visibility: hidden;*/
+/*}*/
 
 pre span.active {
 	background: green;
