@@ -151,7 +151,7 @@ function handleKeyPress(e) {
 	try {
 		shiftNextKey(e.key)
 	} catch (e: StatusUpdate) {
-		window.document.removeEventListener('keyup', handleKeyPress)
+		window.document.removeEventListener('keydown', handleKeyPress)
 
 		endSession()
 		console.log('Error: ', e)
@@ -274,7 +274,7 @@ function main() {
 	// Initialize current selected
 	window.document.querySelector('pre span.initial').classList.add('active')
 
-	window.document.addEventListener('keyup', handleKeyPress)
+	window.document.addEventListener('keydown', handleKeyPress)
 }
 
 main()
