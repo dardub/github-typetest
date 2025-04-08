@@ -130,6 +130,16 @@ pre span.miss {
 	color: red;
 }
 
+table thead td {
+	font-weight: bold;
+	padding: 0.25rem 0.5rem;
+	text-align: left;
+}
+table tbody td {
+	text-align: left;
+	padding: 0.25rem 0.5rem;
+}
+
 @media (min-width: 760px) {
 	#app {
 		width: 600px;

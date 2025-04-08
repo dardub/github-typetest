@@ -9,79 +9,79 @@ import './style.css'
 //      }
 //`
 
+const code = `
+
+declare const __REACT_DEVTOOLS_GLOBAL_HOOK__: Object | void;
+
+export function injectInternals(internals: Object): boolean {
+  if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ === 'undefined') {
+    // No DevTools
+    return false;
+  }
+  const hook = __REACT_DEVTOOLS_GLOBAL_HOOK__;
+  if (hook.isDisabled) {
+    // This isn't a real property on the hook, but it can be set to opt out
+    // of DevTools integration and associated warnings and logs.
+    // https://github.com/facebook/react/issues/3877
+    return true;
+  }
+  if (!hook.supportsFlight) {
+    // DevTools exists, even though it doesn't support Flight.
+    return true;
+  }
+  try {
+    hook.inject(internals);
+  } catch (err) {
+    // Catch all errors because it is unsafe to throw during initialization.
+    if (__DEV__) {
+      console.error('React instrumentation encountered an error: %s.', err);
+    }
+  }
+  if (hook.checkDCE) {
+    // This is the real DevTools.
+    return true;
+  } else {
+    // This is likely a hook installed by Fast Refresh runtime.
+    return false;
+  }
+}
+`
+
 //const code = `
+//class VillageState {
+//  constructor(place, parcels) {
+//    this.place = place;
+//    this.parcels = parcels;
+//  }
 //
-//declare const __REACT_DEVTOOLS_GLOBAL_HOOK__: Object | void;
-//
-//export function injectInternals(internals: Object): boolean {
-//  if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ === 'undefined') {
-//    // No DevTools
-//    return false;
-//  }
-//  const hook = __REACT_DEVTOOLS_GLOBAL_HOOK__;
-//  if (hook.isDisabled) {
-//    // This isn't a real property on the hook, but it can be set to opt out
-//    // of DevTools integration and associated warnings and logs.
-//    // https://github.com/facebook/react/issues/3877
-//    return true;
-//  }
-//  if (!hook.supportsFlight) {
-//    // DevTools exists, even though it doesn't support Flight.
-//    return true;
-//  }
-//  try {
-//    hook.inject(internals);
-//  } catch (err) {
-//    // Catch all errors because it is unsafe to throw during initialization.
-//    if (__DEV__) {
-//      console.error('React instrumentation encountered an error: %s.', err);
+//  move(destination) {
+//    if (!roadGraph[this.place].includes(destination)) {
+//      return this;
+//    } else {
+//      let parcels = this.parcels.map(p => {
+//        if (p.place != this.place) return p;
+//        return {place: destination, address: p.address};
+//      }).filter(p => p.place != p.address);
+//      return new VillageState(destination, parcels);
 //    }
 //  }
-//  if (hook.checkDCE) {
-//    // This is the real DevTools.
-//    return true;
-//  } else {
-//    // This is likely a hook installed by Fast Refresh runtime.
-//    return false;
+//}
+//
+//
+//function runRobot(state, robot, memory) {
+//  for (let turn = 0;; turn++) {
+//    if (state.parcels.length =< 0) {
+//      console.log(\`Done in \${turn} turns\`);
+//      break;
+//    }
+//    let action = robot(state, memory);
+//    state = state.move(action.direction);
+//    memory = action.memory;
+//    console.log(\`Moved to \${action.direction}\`);
 //  }
 //}
+//
 //`
-
-const code = `
-class VillageState {
-  constructor(place, parcels) {
-    this.place = place;
-    this.parcels = parcels;
-  }
-
-  move(destination) {
-    if (!roadGraph[this.place].includes(destination)) {
-      return this;
-    } else {
-      let parcels = this.parcels.map(p => {
-        if (p.place != this.place) return p;
-        return {place: destination, address: p.address};
-      }).filter(p => p.place != p.address);
-      return new VillageState(destination, parcels);
-    }
-  }
-}
-
-
-function runRobot(state, robot, memory) {
-  for (let turn = 0;; turn++) {
-    if (state.parcels.length == 0) {
-      console.log(\`Done in \${turn} turns\`);
-      break;
-    }
-    let action = robot(state, memory);
-    state = state.move(action.direction);
-    memory = action.memory;
-    console.log(\`Moved to \${action.direction}\`);
-  }
-}
-
-`
 
 let s = ''
 let codeList = code.split('')
@@ -106,6 +106,11 @@ class TypingComplete extends StatusUpdate {
 	}
 }
 
+function wpm() {
+	const min = (endTime - startTime) / (1000 * 60)
+	return parseFloat((codeList.length / 5 / min).toFixed(2))
+}
+
 function endSession() {
 	endTimer()
 
@@ -116,30 +121,22 @@ function endSession() {
 	<table>
 		<thead>
 			<tr>
-				<td>
-					Category
-				</td>
-				<td>
-					Stat
-				</td>
-				</tr>
-			</thead>
+				<td>Category</td>
+				<td>Stat</td>
+			</tr>
+		</thead>
 		<tbody>
 			<tr>
-				<td>
-					Duration
-					</td>
-				<td>
-					${(endTime - startTime) / 1000} sec
-				</td>
+				<td>Duration</td>
+				<td>${(endTime - startTime) / 1000} sec</td>
 			</tr>
 			<tr>
-				<td>
-					Mistyped Keys
-					</td>
-				<td>
-					${totalMissed}
-				</td>
+				<td>Mistyped Keys</td>
+				<td>${totalMissed}</td>
+			</tr>
+			<tr>
+				<td>WPM</td>
+				<td>${wpm()}</td>
 			</tr>
 		</tbody>
 	</table>
